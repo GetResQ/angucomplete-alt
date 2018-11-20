@@ -81,12 +81,11 @@
       var displaySearching;
       var displayNoResults;
 
+      window.addEventListener('click', clickoutHandlerForDropdown);
+
       elem.on('mousedown', function(event) {
         if (event.target.id) {
           mousedownOn = event.target.id;
-          if (mousedownOn === scope.id + '_dropdown') {
-            document.body.addEventListener('click', clickoutHandlerForDropdown);
-          }
         }
         else {
           mousedownOn = event.target.className;
@@ -102,6 +101,10 @@
           // change input
           handleInputChange(newval, true);
         }
+      });
+
+      scope.$on('$destroy', function() {
+	window.removeEventListener('click', clickoutHandlerForDropdown);
       });
 
       scope.$watch('fieldRequired', function(newval, oldval) {
@@ -154,7 +157,6 @@
       function clickoutHandlerForDropdown(event) {
         mousedownOn = null;
         scope.hideResults(event);
-        document.body.removeEventListener('click', clickoutHandlerForDropdown);
       }
 
       // for IE8 quirkiness about event.which
